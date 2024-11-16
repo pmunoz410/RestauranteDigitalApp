@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.project.restaurantedigitalapp.activity.ui.inicio.InicioFragment"
+        android:label="@string/inicio"
+        tools:layout="@layout/fragment_inicio" />
+
+    <fragment
+        android:id="@+id/nav_shop"
+        android:name="com.project.restaurantedigitalapp.activity.ui.compras.MisComprasFragment"
+        android:label="@string/mis_compras"
+        tools:layout="@layout/fragment_mis_compras" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.project.restaurantedigitalapp.activity.ui.configuracion.ConfiguracionFragment"
+        android:label="@string/configuracion"
+        tools:layout="@layout/fragment_configuracion" />
+</navigation>

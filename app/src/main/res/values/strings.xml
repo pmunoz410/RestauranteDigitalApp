@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">RestauranteDigitalApp</string>
+    <string name="label_usuario">Correo Electrónico</string>
+    <string name="label_password">Contraseña</string>
+    <string name="label_start_session">Iniciar Sesión</string>
+    <string name="label_nuevoUser"><u>Nuevo Usuario ? Registrarme Ahora</u></string>
+    <string name="label_olvide_password">Olvide mi contraseña ?</string>
+    <string name="label_bienvenida">Hola ! - Identifíquese para iniciar sesión</string>
+    <string name="title_activity_inicio">InicioActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Juan Perez</string>
+    <string name="nav_header_subtitle">correo@correo.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="log_out">Cerrar sesión</string>
+
+    <string name="inicio">Inicio</string>
+    <string name="mis_compras">Mis compras</string>
+    <string name="configuracion">Configuración</string>
+    <string name="excelente_haz_iniciado_sesion">Excelente, Haz iniciado Sesión</string>
+    <string name="lo_sentimos_ocurrio_un_error">Lo Sentimos, Ocurrió un error</string>
+    <string name="contactanos">Contáctanos</string>
+    <string name="subir_imagen_para_tu_perfil">Subir imagen para tu perfil</string>
+    <string name="subir_imagen">Subir Imagen</string>
+    <string name="registrar_datos_personales">Registrar Datos Personales</string>
+    <string name="ingrese_sus_nombres">Ingrese sus nombres</string>
+    <string name="apellido_paterno">Apellido Paterno</string>
+    <string name="apellido_materno">Apellido Materno</string>
+    <string name="tipo_identificacion">Tipo Identificación</string>
+    <string name="num_identificacion">Num. Identificación</string>
+    <string name="departamento">Departamento</string>
+    <string name="provincia">Provincia</string>
+    <string name="telefono">Teléfono</string>
+    <string name="direccion">Dirección</string>
+    <string name="registrar_credenciales">Registrar Credenciales</string>
+    <string name="ingrese_su_correo_electronico">Ingrese su correo electrónico</string>
+    <string name="ingrese_su_contrase_a">Ingrese su contraseña</string>
+    <string name="guardar_datos">Guardar Datos</string>
+    <string name="distrito">Distrito</string>
+    <string name="hola">Hola</string>
+    <string-array name="tipo_doc">
+        <item>DNI</item>
+        <item>RUC</item>
+        <item>CARNET EXT</item>
+        <item>PASAPORTE</item>
+    </string-array>
+    <string-array name="departamentos">
+        <item>Lambayeque</item>
+        <item>Piura</item>
+        <item>Tumbes</item>
+        <item>Lima</item>
+    </string-array>
+    <string-array name="provincias">
+        <item>Chiclayo</item>
+        <item>Lambayeque</item>
+        <item>Ferreñafe</item>
+    </string-array>
+    <string-array name="distritos">
+        <item>Ferreñafe</item>
+        <item>Pueblo Nuevo</item>
+        <item>Mesones Muro</item>
+        <item>Inkahuasi</item>
+        <item>Kañaris</item>
+    </string-array>
+</resources>
