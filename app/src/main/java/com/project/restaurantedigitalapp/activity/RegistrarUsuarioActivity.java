@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -399,67 +401,67 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
                 c.setDireccionEnvio(edtDireccionU.getText().toString());
                 c.setId(0);
 
-                // Generar archivo de imagen
-                if (f != null && f.exists()) {
-                    Log.d("Imagen", "Ruta del archivo: " + f.getAbsolutePath());
-                    LocalDateTime ldt = LocalDateTime.now(); //Para generar el nombre al archivo en base a la fecha, hora, año
-                    RequestBody rb = RequestBody.create(f, MediaType.parse("multipart/form-data")), somedata; //Le estamos enviando un archivo (imagen) desde el formulario
-
-                    String filename = "" + ldt.getDayOfMonth() + (ldt.getMonthValue() + 1) +
-                            ldt.getYear() + ldt.getHour()
-                            + ldt.getMinute() + ldt.getSecond(); //Asignar un nombre al archivo (imagen)
-
-                    MultipartBody.Part part = MultipartBody.Part.createFormData("file", f.getName(), rb);
-                    somedata = RequestBody.create("profilePh" + filename, MediaType.parse("text/plain")); //Le estamos enviando un nombre al archivo.
-
-                    // Llamada al ViewModel para guardar la imagen
-                    this.documentoAlmacenadoViewModel.save(part, somedata).observe(this, response -> {
-                        Log.d("Imagen", "Respuesta del servidor para guardar imagen: " + response.getMessage());
-                        if (response.getRpta() == 1) {
-                            c.setFoto(new DocumentoAlmacenado());
-                            c.getFoto().setId(response.getBody().getId());//Asignamos la foto al cliente
-
-                            // Guardar cliente
-                            this.clienteViewModel.guardarCliente(c).observe(this, cResponse -> {
-                                Log.d("Cliente", "Datos enviados: " + c.toString());
-                                if (cResponse != null) {
-                                    if (cResponse.getRpta() == 1) {
-                                        //Si gustan pueden mostrar este mensaje.
-                                        //Toast.makeText(this, response.getMessage() + ", ahora procederemos a registrar sus credenciales.", Toast.LENGTH_SHORT).show();
-                                        int idc = cResponse.getBody().getId();//Obtener el id del cliente.
-                                        Usuario u = new Usuario();
-                                        u.setEmail(edtEmailUser.getText().toString());
-                                        u.setClave(edtPasswordUser.getText().toString());
-                                        u.setVigencia(true);
-                                        u.setCliente(new Cliente(idc));
-
-                                        // Guardar usuario
-                                        this.usuarioViewModel.save(u).observe(this, uResponse -> {
-                                            //Toast.makeText(this, uResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                                            if (uResponse.getRpta() == 1) {
-                                                //Toast.makeText(this, "Sus Datos y credenciales fueron creados correctamente", Toast.LENGTH_SHORT).show();
-                                                successMessage("Estupendo! " + "Su información ha sido guardada con éxito en el sistema.");
-                                                //this.finish();
-                                            } else {
-                                                toastIncorrecto("1. No se ha podido guardar los datos, intentelo de nuevo");
-                                            }
-                                        });
-                                    } else {
-                                        toastIncorrecto("2. No se ha podido guardar los datos, intentelo de nuevo");
-                                    }
-                                } else {
-                                    Log.e("Cliente", "Respuesta nula del servidor");
-                                    toastIncorrecto("El servidor no respondió. Por favor, verifique la conexión.");
-                                }
-                            });
-                        } else {
-                            Log.e("Imagen", "Error al guardar la imagen: " + response.getMessage());
-                            toastIncorrecto("Error al guardar la imagen, intentelo de nuevo");
-                        }
-                    });
-                }else {
-                    warningMessage("El archivo de imagen no es válido o no existe.");
+                // Validar el archivo antes de continuar
+                if (f == null || !f.exists() || f.length() == 0) {
+                    errorMessage("El archivo no es válido o está vacío. Por favor, seleccione una imagen.");
+                    return;
                 }
+
+                // Generar nombre único para el archivo basado en fecha y hora
+                LocalDateTime ldt = LocalDateTime.now();
+
+                String filename = "" + ldt.getDayOfMonth() + (ldt.getMonthValue() + 1) +
+                        ldt.getYear() + ldt.getHour()
+                        + ldt.getMinute() + ldt.getSecond(); //Asignar un nombre al archivo (imagen)
+                Log.d("DEBUG", "Nombre del archivo generado: " + filename);
+
+                // Crear RequestBody para la imagen
+                RequestBody rb = RequestBody.create(f, MediaType.parse("multipart/form-data"));
+                MultipartBody.Part part = MultipartBody.Part.createFormData("file", f.getName(), rb);
+
+                // Crear RequestBody para datos adicionales
+                // somedata = RequestBody.create("profilePh" + filename, MediaType.parse("text/plain")); //Le estamos enviando un nombre al archivo.
+                RequestBody somedata = RequestBody.create("profilePh" + filename, MediaType.parse("text/plain"));
+
+                // Llamada al ViewModel para guardar la imagen
+                this.documentoAlmacenadoViewModel.save(part, somedata).observe(this, response -> {
+                    if (response.getRpta() == 1) {
+                        // Asignar la imagen al cliente
+                        c.setFoto(new DocumentoAlmacenado());
+                        c.getFoto().setId(response.getBody().getId());
+
+                        // Guardar cliente
+                        this.clienteViewModel.guardarCliente(c).observe(this, cResponse -> {
+                            if (cResponse.getRpta() == 1) {
+                                int idc = cResponse.getBody().getId();
+
+                                // Crear el usuario asociado al cliente
+                                Usuario u = new Usuario();
+                                u.setEmail(edtEmailUser.getText().toString());
+                                u.setClave(edtPasswordUser.getText().toString());
+                                u.setVigencia(true);
+                                u.setCliente(new Cliente(idc));
+
+                                // Guardar usuario
+                                this.usuarioViewModel.save(u).observe(this, uResponse -> {
+                                    if (uResponse.getRpta() == 1) {
+                                        successMessage("Estupendo! " + "Su información ha sido guardada con éxito en el sistema.");
+                                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                            Intent intent = new Intent(this, MainActivity.class);
+                                            startActivity(intent);
+                                        }, 3000);
+                                    } else {
+                                        toastIncorrecto("1. No se ha podido guardar los datos, intentelo de nuevo");
+                                    }
+                                });
+                            } else {
+                                toastIncorrecto("2. No se ha podido guardar los datos, intentelo de nuevo");
+                            }
+                        });
+                    } else {
+                        toastIncorrecto("Error al guardar la imagen, intentelo de nuevo");
+                    }
+                });
             } catch (Exception e) {
                 warningMessage("Se ha producido un error : " + e.getMessage());
             }

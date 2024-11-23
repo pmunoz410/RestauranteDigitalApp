@@ -17,13 +17,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ConfigApi {
 
-    public static final String baseUrl = "http://10.0.2.2:9090";
+    //public static final String baseUrl = "http://10.0.2.2:9090";
+    public static final String baseUrl = "http://192.168.0.102:9090";
     private static Retrofit retrofit;
     private static String token = "";
 
     private static UsuarioApi usuarioApi;
     private static ClienteApi clienteApi;
     private static DocumentoAlmacenadoApi documentoAlmacenadoApi;
+    private static CategoriaApi categoriaApi;
 
     static {
         initClient();
@@ -41,7 +43,7 @@ public class ConfigApi {
                 .build();
     }
 
-    private static OkHttpClient getClient() {
+    public static OkHttpClient getClient() {
         HttpLoggingInterceptor login = new HttpLoggingInterceptor();
         login.level(HttpLoggingInterceptor.Level.BODY);
 
@@ -80,5 +82,12 @@ public class ConfigApi {
             documentoAlmacenadoApi = retrofit.create(DocumentoAlmacenadoApi.class);
         }
         return documentoAlmacenadoApi;
+    }
+
+    public static CategoriaApi getCategoriaApi() {
+        if (categoriaApi == null) {
+            categoriaApi = retrofit.create(CategoriaApi.class);
+        }
+        return categoriaApi;
     }
 }

@@ -41,8 +41,6 @@
     <string-array name="tipo_doc">
         <item>DNI</item>
         <item>RUC</item>
-        <item>CARNET EXT</item>
-        <item>PASAPORTE</item>
     </string-array>
     <string-array name="departamentos">
         <item>Lambayeque</item>
@@ -51,15 +49,15 @@
         <item>Lima</item>
     </string-array>
     <string-array name="provincias">
-        <item>Chiclayo</item>
-        <item>Lambayeque</item>
-        <item>Ferreñafe</item>
+        <item>Barranca</item>
+        <item>Huaral</item>
+        <item>Lima</item>
     </string-array>
     <string-array name="distritos">
-        <item>Ferreñafe</item>
-        <item>Pueblo Nuevo</item>
-        <item>Mesones Muro</item>
-        <item>Inkahuasi</item>
-        <item>Kañaris</item>
+        <item>Ancón</item>
+        <item>Ate</item>
+        <item>Comas</item>
+        <item>Los Olivos</item>
+        <item>San Miguel</item>
     </string-array>
 </resources>

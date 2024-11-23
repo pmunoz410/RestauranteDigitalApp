@@ -31,6 +31,8 @@ import com.project.restaurantedigitalapp.viewmodel.UsuarioViewModel;
 import java.sql.Date;
 import java.sql.Time;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText edtMail, edtPassword;
@@ -184,4 +186,59 @@ public class MainActivity extends AppCompatActivity {
         }
         return retorno;
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String pref = preferences.getString("UsuarioJson", "");
+        if(!pref.equals("")){
+            toastCorrecto("Se detecto una sesión activa, el login será omitido!");
+            this.startActivity(new Intent(this, InicioActivity.class));
+            this.overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        SweetAlertDialog alert = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Has oprimido el botón atrás")
+                .setContentText("¿Quieres cerrar la aplicación?")
+                .setCancelText("No, Cancelar!")
+                .setConfirmText("Sí, Cerrar")
+                .showCancelButton(true)
+                .setCancelClickListener(sDialog -> {
+                    sDialog.dismissWithAnimation();
+                    new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Operación cancelada")
+                            .setContentText("No saliste de la app")
+                            .show();
+                })
+                .setConfirmClickListener(sweetAlertDialog -> {
+                    sweetAlertDialog.dismissWithAnimation();
+                    finish(); // Cierra la actividad correctamente
+                });
+
+        // Ajustar el alto de los botones al mostrar la alerta
+        alert.setOnShowListener(dialog -> {
+            // Obtener botones de Confirmación y Cancelación
+            Button confirmButton = alert.getButton(SweetAlertDialog.BUTTON_CONFIRM);
+            Button cancelButton = alert.getButton(SweetAlertDialog.BUTTON_CANCEL);
+
+            // Ajustar el alto si los botones existen
+            if (confirmButton != null) {
+                ViewGroup.LayoutParams params = confirmButton.getLayoutParams();
+                params.height = 80;
+                confirmButton.setLayoutParams(params);
+            }
+
+            if (cancelButton != null) {
+                ViewGroup.LayoutParams params = cancelButton.getLayoutParams();
+                params.height = 80;
+                cancelButton.setLayoutParams(params);
+            }
+        });
+        alert.show();
+    }
+
 }
